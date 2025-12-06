@@ -93,16 +93,25 @@ struct ListComment
 };
 // END MAIN LIST
 
-// Main Function
-void createListUser(ListUser &L);
-void createListPost(ListPost &L);
-void createLisComment(ListComment &L);
-// End Main Function
-
 // Id global untuk automisasi id
 extern int nextUserID;
 extern int nextPostID;
 extern int nextCommentID;
+
+// Main Function
+void createListUser(ListUser &L);
+void createListPost(ListPost &L);
+void createLisComment(ListComment &L);
+adrUser newUser(infotypeUser x);
+adrPost newPost(infotypePost x);
+adrComment newComment(infotypeComment x);
+void insertUser(ListUser &L, adrUser P);
+void insertPost(ListPost &L, adrPost P);
+void insertComment(ListComment &L, adrComment P);
+void connectUserPost(adrUser U, adrPost P);
+void connectPostComment(adrPost P, adrComment C);
+// End Main Function
+
 
 
 #endif // SOSMED_H_INCLUDED
