@@ -108,10 +108,14 @@ adrComment newComment(infotypeComment x);
 void insertUser(ListUser &L, adrUser P);
 void insertPost(ListPost &L, adrPost P);
 void insertComment(ListComment &L, adrComment P);
-void connectUserPost(adrUser U, adrPost P);
-void connectPostComment(adrPost P, adrComment C);
+void connectUserPost(adrUser &U, adrPost P);
+void connectPostComment(adrPost &P, adrComment C);
+void deleteRelationUserPost(adrUser &U, int idPost);
+void deletePost(ListPost &L, int idPost);
 // End Main Function
 
-
+// COMMON FUNCTION
+bool isValidDate(string date);
+// COMMON FUNCTION END
 
 #endif // SOSMED_H_INCLUDED
