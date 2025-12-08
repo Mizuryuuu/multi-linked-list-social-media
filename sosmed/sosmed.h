@@ -22,12 +22,12 @@ struct infotypePost {
     string imagePost;
     string description;
 };
-
+    
 // INFOTYPE COMMENT
 struct infotypeComment {
     int idComment;
     int idUserComment;   
-    string date;
+    string date;    
     string comment;
 };
 

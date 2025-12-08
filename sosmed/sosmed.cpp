@@ -69,8 +69,6 @@ void connectPostComment(adrPost &P, adrComment C){
     R->next = P->firstChild;
     P->firstChild = R;
 }
-
-
 // END INSERT FUNCTION
 
 // COMMON FUNCTION
