@@ -22,12 +22,12 @@ struct infotypePost {
     string imagePost;
     string description;
 };
-
+    
 // INFOTYPE COMMENT
 struct infotypeComment {
     int idComment;
     int idUserComment;   
-    string date;
+    string date;    
     string comment;
 };
 
@@ -111,6 +111,14 @@ void insertComment(ListComment &L, adrComment P);
 void connectUserPost(adrUser U, adrPost P);
 void connectPostComment(adrPost P, adrComment C);
 void deleteComment(ListComment &L, adrComment C);
+void connectUserPost(adrUser &U, adrPost P);
+void connectPostComment(adrPost &P, adrComment C);
+void deleteRelationUserPost(adrUser &U, int idPost);
+void deletePost(ListPost &L, int idPost);
 // End Main Function
+
+// COMMON FUNCTION
+bool isValidDate(string date);
+// COMMON FUNCTION END
 
 #endif // SOSMED_H_INCLUDED
