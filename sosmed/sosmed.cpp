@@ -69,4 +69,26 @@ void connectPostComment(adrPost P, adrComment C){
     R->next = P->firstChild;
     P->firstChild = R;
 }
+
+void deleteComment(ListComment &L, adrComment C){
+    adrComment p;
+    
+    if (L.first == C) {
+        L.first = C->nextComment;
+        C->nextComment = Nil;
+        delete C;
+    } else {
+        p = L.first;
+        while (p != Nil && p->nextComment != C){
+            p = p->nextComment;
+        }
+        if (p != Nil) {
+            p->nextComment = C->nextComment;
+            C->nextComment = Nil;
+            delete C;
+        } else {
+            cout << "Komen Tidak ada" << endl;
+        }
+    }
+}
 // END INSERT FUNCTION

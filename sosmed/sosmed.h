@@ -17,7 +17,7 @@ struct infotypeUser {
 // INFOTYPE POST
 struct infotypePost {
     int idPost;
-    int idUser;          
+    int idUser;
     string date;
     string imagePost;
     string description;
@@ -110,8 +110,7 @@ void insertPost(ListPost &L, adrPost P);
 void insertComment(ListComment &L, adrComment P);
 void connectUserPost(adrUser U, adrPost P);
 void connectPostComment(adrPost P, adrComment C);
+void deleteComment(ListComment &L, adrComment C);
 // End Main Function
-
-
 
 #endif // SOSMED_H_INCLUDED
