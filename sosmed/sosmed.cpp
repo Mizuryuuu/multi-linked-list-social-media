@@ -69,7 +69,9 @@ void connectPostComment(adrPost &P, adrComment C){
     R->next = P->firstChild;
     P->firstChild = R;
 }
+// END INSERT FUNCTION
 
+// DELETE FUNCITON
 void deleteComment(ListComment &L, adrComment C){
     adrComment p;
     
@@ -91,7 +93,7 @@ void deleteComment(ListComment &L, adrComment C){
         }
     }
 }
-// END INSERT FUNCTION
+// END DELETE FUNCTION
 
 // COMMON FUNCTION
 bool isValidDate(string date) {
