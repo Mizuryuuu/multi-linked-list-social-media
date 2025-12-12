@@ -98,6 +98,10 @@ extern int nextUserID;
 extern int nextPostID;
 extern int nextCommentID;
 
+// Allocata data
+
+// End Allocate data
+
 // Main Function
 void createListUser(ListUser &L);
 void createListPost(ListPost &L);
@@ -116,11 +120,24 @@ void connectPostComment(adrPost &P, adrComment C);
 void deleteRelationUserPost(adrUser &U, int idPost);
 void deleteRelationPostComment(adrPost &P, int idComment);
 void deletePost(ListPost &L, int idPost);
+void showBeranda(ListPost LP, ListUser);
+adrUser findUserById(ListUser L, int idUser);
+adrPost findPostById(ListPost L, int idPost);
+adrComment findCommentById(ListComment L, int idComment);
+adrComment findPostById(ListComment L, int idComment);
+adrRelasiPost findRelasiPost(adrUser U, adrPost P);
+int countCommentPost(adrPost P);
+int countPostUser(adrUser U);
+int countUser(ListUser L);
+int countRelationPost(ListUser L, adrPost P);
+int countNoRelationPost(ListUser LU, ListPost LP);
+int countNoRelationComment(ListPost LP, ListComment LC);
 void deleteUser(ListPost &L, int idPost);
 // End Main Function
 
 // COMMON FUNCTION
 bool isValidDate(string date);
+vector<adrPost> getRandomPost(ListPost L);
 // COMMON FUNCTION END
 
 #endif // SOSMED_H_INCLUDED
