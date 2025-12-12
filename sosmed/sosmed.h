@@ -122,6 +122,7 @@ void deletePost(ListPost &L, int idPost);
 void showBeranda(ListPost LP, ListUser);
 adrUser findUserById(ListUser L, int idUser);
 adrPost findPostById(ListPost L, int idPost);
+adrComment findCommentById(ListComment L, int idComment);
 adrComment findPostById(ListComment L, int idComment);
 adrRelasiPost findRelasiPost(adrUser U, adrPost P);
 int countCommentPost(adrPost P);
