@@ -121,6 +121,15 @@ adrPost findPostById(ListPost L, int idPost){
     return Nil;
 }
 
+adrComment findCommentById(ListComment L, int idComment){
+    adrComment P = L.first;
+    while(P != Nil){
+        if(P->info.idComment == idComment) return P;
+        P = P->nextComment;
+    }
+    return Nil;
+}
+
 adrComment findPostById(ListComment L, int idComment){
     adrComment P = L.first;
     while(P != Nil){
