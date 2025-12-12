@@ -72,6 +72,66 @@ void connectPostComment(adrPost &P, adrComment C){
 // END INSERT FUNCTION
 
 // DELETE FUNCITON
+void deleteRelationUserPost(adrUser &U, int idPost){
+    adrRelasiPost p,q;
+
+    p = U->firstChild;
+    if (p == Nil) {
+        cout << "Postingan Kosong.";
+    }
+    
+    if (p->child->info.idPost == idPost){
+        U->firstChild = p->next;
+        p->next = Nil;
+        delete p;
+        return;
+    }
+
+    q = U->firstChild;
+    while (q->next != Nil && q->next->child->info.idPost != idPost){
+        q = q->next;
+    }
+
+    if (q->next != Nil){
+        p = q->next;
+        q->next = p->next;
+        p->next = Nil;
+        delete p;
+        return;
+    }
+
+    cout << "Postingan ngga ketemu.";
+}
+void deleteRelationPostComment(adrPost &P, int idComment){
+    adrRelasiComment c,q;
+
+    c = P->firstChild;
+    if (c == Nil) {
+        cout << "Komentar Kosong.";
+    }
+    
+    if (c->child->info.idComment == idComment){
+        P->firstChild = c->next;
+        c->next = Nil;
+        delete c;
+        return;
+    }
+
+    q = P->firstChild;
+    while (q->next != Nil && q->next->child->info.idComment != idComment){
+        q = q->next;
+    }
+
+    if (q->next != Nil){
+        c = q->next;
+        q->next = c->next;
+        c->next = Nil;
+        delete c;
+        return;
+    }
+
+    cout << "Komentar ngga ketemu.";
+}
 void deleteComment(ListComment &L, adrComment C){
     adrComment p;
     
@@ -92,6 +152,25 @@ void deleteComment(ListComment &L, adrComment C){
             cout << "Komen Tidak ada" << endl;
         }
     }
+}
+
+void deletePost(ListPost &L, int idPost){
+    ListComment LC;
+    adrPost P;
+    adrRelasiComment c;
+    adrComment C;
+
+    P = L.first;
+    while (P != Nil && P->info.idPost != idPost){
+        P = P->nextPost;
+    }
+
+    c = P->firstChild;
+
+}
+
+void deleteUser(ListPost &L, int idPost){
+
 }
 // END DELETE FUNCTION
 

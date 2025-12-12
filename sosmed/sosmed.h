@@ -114,7 +114,9 @@ void deleteComment(ListComment &L, adrComment C);
 void connectUserPost(adrUser &U, adrPost P);
 void connectPostComment(adrPost &P, adrComment C);
 void deleteRelationUserPost(adrUser &U, int idPost);
+void deleteRelationPostComment(adrPost &P, int idComment);
 void deletePost(ListPost &L, int idPost);
+void deleteUser(ListPost &L, int idPost);
 // End Main Function
 
 // COMMON FUNCTION
