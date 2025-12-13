@@ -114,12 +114,19 @@ void insertPost(ListPost &L, adrPost P);
 void insertComment(ListComment &L, adrComment P);
 void connectUserPost(adrUser U, adrPost P);
 void connectPostComment(adrPost P, adrComment C);
+void deleteFirstComment(ListComment &L, adrComment C);
+void deleteAfterComment(ListComment &L,adrComment prec, adrComment C);
 void deleteComment(ListComment &L, adrComment C);
 void connectUserPost(adrUser &U, adrPost P);
 void connectPostComment(adrPost &P, adrComment C);
 void deleteRelationUserPost(adrUser &U, int idPost);
-void deleteRelationPostComment(adrPost &P, int idComment);
-void deletePost(ListPost &L, int idPost);
+void deleteRelationPostComment(adrPost &P ,ListComment &L, int idComment);
+void deleteFirstPost(ListPost &LP);
+void deleteAfterPost(ListPost &LP, adrPost prec);
+void deletePost(ListComment &LC,ListPost &LP, adrPost P);
+void deleteFirstUser(ListUser &LU);
+void deleteAfterUser(ListUser &LU, adrUser prec);
+void deleteUser(ListUser &LU, ListPost &LP,ListComment &LC,adrUser U);
 void showBeranda(ListPost LP, ListUser);
 adrUser findUserById(ListUser L, int idUser);
 adrPost findPostById(ListPost L, int idPost);
@@ -132,7 +139,7 @@ int countUser(ListUser L);
 int countRelationPost(ListUser L, adrPost P);
 int countNoRelationPost(ListUser LU, ListPost LP);
 int countNoRelationComment(ListPost LP, ListComment LC);
-void deleteUser(ListPost &L, int idPost);
+
 // End Main Function
 
 // COMMON FUNCTION

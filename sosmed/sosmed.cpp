@@ -73,14 +73,15 @@ void connectPostComment(adrPost &P, adrComment C){
 
 // DELETE FUNCITON
 void deleteRelationUserPost(adrUser &U, int idPost){
-    adrRelasiPost p,q;
+    adrRelasiPost p, q;
 
     p = U->firstChild;
     if (p == Nil) {
-        cout << "Postingan Kosong.";
+        cout << "Postingan Kosong" << endl;
+        return;
     }
-    
-    if (p->child->info.idPost == idPost){
+
+    if (p->child->info.idPost == idPost) {
         U->firstChild = p->next;
         p->next = Nil;
         delete p;
@@ -88,21 +89,20 @@ void deleteRelationUserPost(adrUser &U, int idPost){
     }
 
     q = U->firstChild;
-    while (q->next != Nil && q->next->child->info.idPost != idPost){
+    while (q->next != Nil && q->next->child->info.idPost != idPost) {
         q = q->next;
     }
 
-    if (q->next != Nil){
+    if (q->next != Nil) {
         p = q->next;
         q->next = p->next;
         p->next = Nil;
         delete p;
-        return;
     }
 
     cout << "Postingan ngga ketemu.";
 }
-void deleteRelationPostComment(adrPost &P, int idComment){
+void deleteRelationPostComment(adrPost &P ,ListComment &L, int idComment){
     adrRelasiComment c,q;
 
     c = P->firstChild;
@@ -113,6 +113,7 @@ void deleteRelationPostComment(adrPost &P, int idComment){
     if (c->child->info.idComment == idComment){
         P->firstChild = c->next;
         c->next = Nil;
+        deleteComment(L,c->child);
         delete c;
         return;
     }
@@ -126,50 +127,126 @@ void deleteRelationPostComment(adrPost &P, int idComment){
         c = q->next;
         q->next = c->next;
         c->next = Nil;
+        deleteComment(L,c->child);
         delete c;
         return;
     }
 
     cout << "Komentar ngga ketemu.";
 }
+
+void deleteFirstComment(ListComment &L, adrComment C){
+    L.first = C->nextComment;
+    C->nextComment = Nil;
+    delete C;
+}
+
+void deleteAfterComment(ListComment &L,adrComment prec, adrComment C){
+    prec->nextComment = C->nextComment;
+    C->nextComment = Nil;
+    delete C;
+}
 void deleteComment(ListComment &L, adrComment C){
     adrComment p;
     
     if (L.first == C) {
-        L.first = C->nextComment;
-        C->nextComment = Nil;
-        delete C;
+        deleteFirstComment(L,C);
     } else {
         p = L.first;
         while (p != Nil && p->nextComment != C){
             p = p->nextComment;
         }
         if (p != Nil) {
-            p->nextComment = C->nextComment;
-            C->nextComment = Nil;
-            delete C;
+            deleteAfterComment(L,p,C);
         } else {
             cout << "Komen Tidak ada" << endl;
         }
     }
 }
 
-void deletePost(ListPost &L, int idPost){
-    ListComment LC;
+void deleteFirstPost(ListPost &LP){
     adrPost P;
-    adrRelasiComment c;
-    adrComment C;
 
-    P = L.first;
-    while (P != Nil && P->info.idPost != idPost){
-        P = P->nextPost;
+    P = LP.first;
+    LP.first = P->nextPost;
+    P->nextPost = Nil;
+    delete P;
+}
+
+void deleteAfterPost(ListPost &LP, adrPost prec){
+    adrPost P; 
+
+    P = prec->nextPost;
+    prec->nextPost = P->nextPost;
+    P->nextPost = Nil;
+    delete P;
+}
+
+void deletePost(ListComment &LC,ListPost &LP, adrPost P){
+    adrRelasiComment c;
+    adrPost prec;
+
+    
+    while (P->firstChild != Nil) {
+        deleteRelationPostComment(P,LC,P->firstChild->child->info.idComment);
     }
 
-    c = P->firstChild;
+    
+    if (LP.first == P) {
+        deleteFirstPost(LP);
+    } else {
+        prec = LP.first;
+        while (prec->nextPost != Nil && prec->nextPost != P) {
+            prec = prec->nextPost;
+        }
+        if (prec->nextPost == P) {
+            deleteAfterPost(LP, prec);
+        }
+    }
 
 }
 
-void deleteUser(ListPost &L, int idPost){
+void deleteFirstUser(ListUser &LU){
+    adrUser U;
+    
+    U = LU.first;
+    LU.first = U->nextUser;
+    U->nextUser = Nil;
+    delete U;
+}
+
+void deleteAfterUser(ListUser &LU, adrUser prec){
+    adrUser U;
+    
+    U = prec->nextUser;
+    prec->nextUser = U->nextUser;
+    U->nextUser = Nil;
+    delete U;
+}
+
+void deleteUser(ListUser &LU, ListPost &LP,ListComment &LC,adrUser U){
+    adrRelasiPost r;
+    adrPost P;
+
+    while (U->firstChild != Nil) {
+        r = U->firstChild;
+        P = r->child;
+        
+        deleteRelationUserPost(U, P->info.idPost);
+        deletePost(LC, LP, P);
+    }
+
+    if (LU.first == U) {
+        deleteFirstUser(LU);
+    } else {
+        adrUser prec = LU.first;
+        while (prec->nextUser != Nil && prec->nextUser != U) {
+            prec = prec->nextUser;
+        }
+        if (prec->nextUser == U) {
+            deleteAfterUser(LU, prec);
+        }
+    }
 
 }
 // END DELETE FUNCTION
