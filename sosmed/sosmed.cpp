@@ -1,4 +1,9 @@
-#include "sosmed/sosmed.h"
+#include "sosmed.h"
+
+// DEFINE ID
+int nextUserID = 4;
+int nextPostID = 104;
+int nextCommentID = 204;
 
 // CREATE LIST
 void createListUser(ListUser &L){
@@ -183,7 +188,6 @@ void deleteAfterPost(ListPost &LP, adrPost prec){
 }
 
 void deletePost(ListComment &LC,ListPost &LP, adrPost P){
-    adrRelasiComment c;
     adrPost prec;
 
     
@@ -255,7 +259,347 @@ void deleteUser(ListUser &LU, ListPost &LP,ListComment &LC,adrUser U){
 // END EDIT DATA FUNCTION
 
 // SHOW DATA FUNCTION
+void showBeranda(ListUser LU, ListPost LP){
+    system("cls");
+    cout << "============================" << endl;
+    cout << "          BERANDA           " << endl;
+    cout << "============================" << endl << endl;
 
+    vector<adrPost> posts = getRandomPost(LP);
+
+    if (posts.empty()) {
+        cout << "Belum ada postingan.\n\n";
+        return;
+    }
+
+    for (adrPost P : posts) {
+        adrUser U = findUserByPost(LU, P);
+
+        cout << "[Post ID: " << P->info.idPost << "]" << endl;
+        cout << P->info.date << endl;
+        cout << P->info.imagePost << endl;
+
+        if (U != Nil)
+            cout << U->info.username << ": ";
+        else
+            cout << "unknown: ";
+
+        cout << P->info.description << endl;
+        cout << "comment (" << countCommentPost(P) << ") ->\n\n";
+    }
+
+    cout << "==========================" << endl;
+    cout << "1. Postingan User" << endl;
+    cout << "2. Comment User" << endl;
+    cout << "3. Profile" << endl;
+    cout << "4. Lihat Comment Postingan" << endl;
+    cout << "5. Admin" << endl;
+    cout << "terminal: ";
+}
+
+void showPostinganUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser){
+    bool running = true;
+
+    while (running) {
+        system("cls");
+        cout << "============================" << endl;
+        cout << "          POSTINGAN         " << endl;
+        cout << "============================" << endl << endl;
+
+        if (currentUser->firstChild == Nil) {
+            cout << "Belum ada postingan.\n\n";
+        } else {
+            adrRelasiPost R = currentUser->firstChild;
+            while (R != Nil) {
+                adrPost P = R->child;
+
+                cout << "[Post ID: " << P->info.idPost << "]" << endl;
+                cout << P->info.date << endl;
+                cout << P->info.imagePost << endl;
+                cout << currentUser->info.username << ": ";
+                cout << P->info.description << endl;
+                cout << "comment (" << countCommentPost(P) << ") ->\n\n";
+
+                R = R->next;
+            }
+        }
+
+        cout << "==========================" << endl;
+        cout << "1. Tambah Postingan" << endl;
+        cout << "2. Edit Postingan" << endl;
+        cout << "3. Delete Postingan" << endl;
+        cout << "0. Kembali ke Beranda" << endl;
+        cout << "terminal: ";
+
+        int menu;
+        cin >> menu;
+
+        switch(menu) {
+            case 1: {
+                    infotypePost post;
+                    post.idPost = nextPostID++;
+                    post.idUser = currentUser->info.idUser;
+                    cout << "Masukkan gambar (image.png/.jpg): ";
+                    getline(cin >> ws, post.imagePost);
+                    do {
+                        cout << "Masukkan tanggal (DD/MM/YYYY): ";
+                        getline(cin, post.date);
+
+                        if (!isValidDate(post.date)) {
+                            cout << "Format tanggal salah! Contoh: 05/12/2025\n";
+                        }
+
+                    } while (!isValidDate(post.date));
+                    cout << "Masukkan deskripsi: ";
+                    getline(cin, post.description);
+                    adrPost newP = newPost(post);
+                    insertPost(LP, newP);
+                    connectUserPost(currentUser, newP);
+                break;
+            }
+            case 2: {
+                int idPost;
+                cout << "Masukkan ID Post: ";
+                cin >> idPost;
+
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                adrPost P = findPostById(LP, idPost);
+                if (P != Nil) {
+                    if (findRelasiPost(currentUser, P) != Nil) {
+                        cout << "Edit deskripsi: ";
+                        getline(cin, P->info.description);
+                    } else {
+                        cout << "Post bukan milik user\n";
+                        cin.get();
+                    }
+                } else {
+                    cout << "Post tidak ditemukan\n";
+                    cin.get();
+                }
+                break;
+            }
+            case 3: {
+                int idPost;
+                cout << "Masukkan ID Post: ";
+                cin >> idPost;
+
+                adrPost P = findPostById(LP, idPost);
+                if (P != Nil && findRelasiPost(currentUser, P) != Nil) {
+                    deleteRelationUserPost(currentUser, idPost);
+                    deletePost(LC, LP, P);
+                } else {
+                    cout << "Post tidak ditemukan / bukan milik user\n";
+                    cin.ignore();
+                    cin.get();
+                }
+                break;
+            }
+
+            case 0:
+                running = false;
+                break;
+
+            default:
+                cout << "Menu tidak valid\n";
+                cin.ignore();
+                cin.get();
+                break;
+        }
+    }
+}
+
+
+void showCommentByPost(ListUser LU, ListComment &LC, adrPost P, adrUser currentUser){
+    bool running = true;
+
+    while (running) {
+        system("cls");
+        cout << "============================" << endl;
+        cout << "      COMMENT POSTINGAN     " << endl;
+        cout << "============================" << endl << endl;
+
+        adrUser owner = findUserByPost(LU, P);
+
+        cout << P->info.date << endl;
+        cout << P->info.imagePost << endl;
+
+        if (owner != Nil)
+            cout << owner->info.username << ": ";
+        else
+            cout << "unknown: ";
+
+        cout << P->info.description << endl << endl;
+        
+        cout << "Comment Post -> " << endl;
+
+        if (P->firstChild == Nil) {
+            cout << "Belum ada komentar.\n\n";
+        } else {
+            adrRelasiComment R = P->firstChild;
+            while (R != Nil) {
+                adrComment C = R->child;
+                adrUser commenter = findUserById(LU, C->info.idUserComment);
+
+                cout << C->info.date << endl;
+                if (commenter != Nil)
+                    cout << commenter->info.username << ": ";
+                else
+                    cout << "unknown: ";
+
+                cout << C->info.comment << endl << endl;
+
+                R = R->next;
+            }
+        }
+
+        cout << "==========================" << endl;
+        cout << "1. Tambah Comment" << endl;
+        cout << "0. Kembali ke Beranda" << endl;
+        cout << "terminal: ";
+
+        int menu;
+        cin >> menu;
+        switch (menu) {
+            case 1: {
+                infotypeComment comment;
+                comment.idComment = nextCommentID++;
+                comment.idUserComment = currentUser->info.idUser;
+
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                do {
+                    cout << "Masukkan tanggal (DD/MM/YYYY): ";
+                    getline(cin, comment.date);
+
+                    if (!isValidDate(comment.date)) {
+                        cout << "Format tanggal salah! Contoh: 05/12/2025\n";
+                    }
+
+                } while (!isValidDate(comment.date));
+
+                cout << "Masukkan komentar: ";
+                getline(cin, comment.comment);
+                adrComment newC = newComment(comment);
+                insertComment(LC, newC);
+                connectPostComment(P, newC);
+                break;
+            }
+            case 0:
+                running = false;
+                break;
+            default:
+                cout << "Menu tidak valid\n";
+                cin.ignore();
+                cin.get();
+                break;
+        }
+    }
+}
+
+ 
+void showCommentUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser){
+    bool running = true;
+
+    while (running) {
+        system("cls");
+        cout << "============================" << endl;
+        cout << "        COMMENT USER        " << endl;
+        cout << "============================" << endl << endl;
+
+        bool ada = false;
+
+        adrPost P = LP.first;
+        while (P != Nil) {
+            adrRelasiComment R = P->firstChild;
+
+            while (R != Nil) {
+                adrComment C = R->child;
+
+                if (C->info.idUserComment == currentUser->info.idUser) {
+                    ada = true;
+
+                    cout << "[Post ID: " << C->info.idComment << "]" << endl;
+                    cout << C->info.date << endl;
+                    cout << currentUser->info.username << ": ";
+                    cout << C->info.comment << endl << endl;
+                }
+
+                R = R->next;
+            }
+
+            P = P->nextPost;
+        }
+
+        if (!ada) {
+            cout << "Belum ada komentar.\n\n";
+        }
+
+        cout << "==========================" << endl;
+        cout << "1. Edit Comment" << endl;
+        cout << "2. Delete Comment" << endl;
+        cout << "0. Kembali ke Beranda" << endl;
+        cout << "terminal: ";
+     
+        int menu;
+        cin >> menu;
+
+        switch (menu)
+        {
+        case 1:{
+            int idComment;
+            cout << "Masukkan ID Comment: ";
+            cin >> idComment;
+            adrComment C = findCommentById(LC, idComment);
+            if (C != Nil) {
+                if (C->info.idUserComment == currentUser->info.idUser) {
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Edit komentar: ";
+                    getline(cin, C->info.comment);
+                } else {
+                    cout << "Komentar bukan milik user\n";
+                    cin.ignore();
+                    cin.get();
+                }
+            } else {
+                cout << "Komentar tidak ditemukan\n";
+                cin.ignore();
+                cin.get();
+            }
+            break;
+        }
+
+        case 2:{
+            int idComment;
+            cout << "Masukkan ID Comment: ";
+            cin >> idComment;
+            adrComment C = findCommentById(LC, idComment);
+            if (C != Nil) {
+                if (C->info.idUserComment == currentUser->info.idUser) {
+                    deleteRelationPostComment(P, LC, idComment);
+                } else {
+                    cout << "Komentar bukan milik user\n";
+                    cin.ignore();
+                    cin.get();
+                }
+            } else {
+                cout << "Komentar tidak ditemukan\n";
+                cin.ignore();
+                cin.get();
+            }
+            break;
+        }
+        case 0:
+            running = false;
+            break;
+        default:
+            cout << "Menu tidak valid\n";
+            cin.ignore();
+            cin.get();
+            break;
+        }
+    }
+}
 // END SHOW DATA FUNCTION
 
 // FIND FUNCTION
@@ -286,26 +630,34 @@ adrComment findCommentById(ListComment L, int idComment){
     return Nil;
 }
 
-adrComment findPostById(ListComment L, int idComment){
-    adrComment P = L.first;
-    while(P != Nil){
-        if(P->info.idComment == idComment) return P;
-        P = P->nextComment;
-    }
-    return Nil;
-}
-
 adrRelasiPost findRelasiPost(adrUser U, adrPost P) {
     adrRelasiPost R = U->firstChild;
 
     while (R != Nil) {
         if (R->child == P) {
-            return R;      // relasi ditemukan
+            return R;
         }
         R = R->next;
     }
-    return Nil;            // relasi tidak ada
+    return Nil;
 }
+
+adrUser findUserByPost(ListUser LU, adrPost P){
+    adrUser U = LU.first;
+
+    while (U != Nil) {
+        adrRelasiPost R = U->firstChild;
+        while (R != Nil) {
+            if (R->child == P) {
+                return U;
+            }
+            R = R->next;
+        }
+        U = U->nextUser;
+    }
+    return Nil;
+}
+
 // END FIND FUNCTION
 
 // COUNT FUNCTION
@@ -457,7 +809,7 @@ vector<adrPost> getRandomPost(ListPost L){
         P = P->nextPost;
     }
 
-    random_shuffle(data.begin(), data.end());
+    shuffle(data.begin(), data.end(), mt19937(random_device{}()));
 
     if (data.size() > 3) {
         data.resize(3);

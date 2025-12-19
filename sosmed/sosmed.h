@@ -112,8 +112,6 @@ adrComment newComment(infotypeComment x);
 void insertUser(ListUser &L, adrUser P);
 void insertPost(ListPost &L, adrPost P);
 void insertComment(ListComment &L, adrComment P);
-void connectUserPost(adrUser U, adrPost P);
-void connectPostComment(adrPost P, adrComment C);
 void deleteFirstComment(ListComment &L, adrComment C);
 void deleteAfterComment(ListComment &L,adrComment prec, adrComment C);
 void deleteComment(ListComment &L, adrComment C);
@@ -127,19 +125,21 @@ void deletePost(ListComment &LC,ListPost &LP, adrPost P);
 void deleteFirstUser(ListUser &LU);
 void deleteAfterUser(ListUser &LU, adrUser prec);
 void deleteUser(ListUser &LU, ListPost &LP,ListComment &LC,adrUser U);
-void showBeranda(ListPost LP, ListUser);
+void showBeranda(ListUser LU, ListPost LP);
+void showPostinganUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser);
+void showCommentUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser);
+void showCommentByPost(ListUser LU, ListComment &LC, adrPost P, adrUser currentUser);
 adrUser findUserById(ListUser L, int idUser);
 adrPost findPostById(ListPost L, int idPost);
 adrComment findCommentById(ListComment L, int idComment);
-adrComment findPostById(ListComment L, int idComment);
 adrRelasiPost findRelasiPost(adrUser U, adrPost P);
+adrUser findUserByPost(ListUser LU, adrPost P);
 int countCommentPost(adrPost P);
 int countPostUser(adrUser U);
 int countUser(ListUser L);
 int countRelationPost(ListUser L, adrPost P);
 int countNoRelationPost(ListUser LU, ListPost LP);
 int countNoRelationComment(ListPost LP, ListComment LC);
-
 // End Main Function
 
 // COMMON FUNCTION
