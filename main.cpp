@@ -34,7 +34,7 @@ int main() {
 
     // ===== RELASI USER - POST =====
     connectUserPost(u1, p1);
-    connectUserPost(u2, p2);
+    connectUserPost(u1, p2);
     connectUserPost(u3, p3);
 
     // ===== DUMMY COMMENT =====
@@ -105,6 +105,10 @@ int main() {
             cout << "5. Lihat Data Postingan <- User" << endl;
             cout << "6. Edit Relasi User - Postingan" << endl;
             cout << "7. Edit Relasi Postingan - Komentar" << endl;
+            cout << "8. Count Element dari Parent User" << endl;
+            cout << "9. Count Relasi yang dimiliki oleh Child Postingan" << endl;
+            cout << "10. Count Element Child Postingan tanpa Relasi" << endl;
+            cout << "11. Count Element Child Komentar tanpa Relasi" << endl;
             cout << "0. Logout" << endl;
             cout << "terminal: ";
             cin >> menu;
@@ -171,7 +175,7 @@ int main() {
                     }
                     break;
                 case 4:
-                    showCommentWithPost(LP);
+                    showAllParentAndChild(LU);
                     cin.ignore();
                     cin.get();
                     break;
@@ -226,6 +230,54 @@ int main() {
                         cin.get();  
                     }
                     break;
+                case 8:
+                    {
+                        int idUser;
+                        cout << "Masukkan ID User: ";
+                        cin >> idUser;
+                        adrUser U = findUserById(LU, idUser);
+                        if (U != Nil) {
+                            int count = countPostUser(U);
+                            cout << "Jumlah Postingan oleh User ID " << idUser << ": " << count << endl;
+                        } else {
+                            cout << "User tidak ditemukan.\n";
+                        }
+                        cin.ignore();
+                        cin.get();
+                    }
+                    break;
+                case 9:
+                    {
+                        int idPost;
+                        cout << "Masukkan ID Postingan: ";
+                        cin >> idPost;
+                        adrPost P = findPostById(LP, idPost);
+                        if (P != Nil) {
+                            int count = countCommentPost(P);
+                            cout << "Jumlah Komentar pada Postingan ID " << idPost << ": " << count << endl;
+                        } else {
+                            cout << "Postingan tidak ditemukan.\n";
+                        }
+                        cin.ignore();
+                        cin.get();
+                    }
+                    break;
+                case 10:
+                    {
+                        int count = countNoRelationPost(LU, LP);
+                        cout << "Jumlah Postingan tanpa Relasi User: " << count << endl;
+                        cin.ignore();
+                        cin.get();
+                    }
+                    break;
+                case 11:
+                    {
+                        int count = countNoRelationComment(LP, LC);
+                        cout << "Jumlah Komentar tanpa Relasi Postingan: " << count << endl;
+                        cin.ignore();
+                        cin.get();
+                    }
+                    break;
                 case 0:
                     running = false;
                     break;
@@ -274,19 +326,9 @@ int main() {
             }
 
             case 5:
-                system("cls");
-                cout << "ADMIN MODE\n";
-                cout << "Total User : " << countUser(LU) << endl;
-                cout << "Post tanpa user : " << countNoRelationPost(LU, LP) << endl;
-                cout << "Comment tanpa post : " << countNoRelationComment(LP, LC) << endl;
-                cin.ignore();
-                cin.get();
-                break;
-
-            case 0:
                 running = false;
                 break;
-
+                
             default:
                 cout << "Menu tidak valid\n";
                 cin.ignore();

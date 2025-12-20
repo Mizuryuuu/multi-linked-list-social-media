@@ -690,34 +690,39 @@ void showProfile(ListUser LU, adrUser &currentUser){
     
 }
 
-void showCommentWithPost(ListPost LP) {
+void showAllParentAndChild(ListUser LU) {
     system("cls");
-    cout << "============================" << endl;
-    adrPost P = LP.first;
+    cout << "=============================" << endl;
+    cout << " SEMUA DATA PARENT DAN CHILD" << endl;
+    cout << "=============================" << endl;
+    adrUser U = LU.first;
+    while (U != Nil) {
+        cout << "Parent User:" << endl;
+        cout << "User ID: " << U->info.idUser << endl;
+        cout << "Username: " << U->info.username << endl;
 
-    if (P == Nil) {
-        cout << "Belum ada post.\n";
-        return;
-    }
-
-    while (P != Nil) {
-        adrRelasiComment R = P->firstChild;
-
+        adrRelasiPost R = U->firstChild;
         while (R != Nil) {
-            adrComment C = R->child;
+            adrPost P = R->child;
+            cout << "  Child Post:" << endl;
+            cout << "  Post ID: " << P->info.idPost << endl;
+            cout << "  Description: " << P->info.description << endl;
 
-            cout << "Comment ID: " << C->info.idComment << endl;
-            cout << "Isi Comment: " << C->info.comment << endl;
+            adrRelasiComment RC = P->firstChild;
+            while (RC != Nil) {
+                adrComment C = RC->child;
+                cout << "    Child Lvl 2 Comment:" << endl;
+                cout << "    Comment ID: " << C->info.idComment << endl;
+                cout << "    Comment: " << C->info.comment << endl;
 
-            cout << "Parent Post:" << endl;
-            cout << "Post ID: " << P->info.idPost << endl;
-            cout << "Gambar: " << P->info.imagePost << endl;
-            cout << "------------------------\n";
+                RC = RC->next;
+            }
 
             R = R->next;
         }
 
-        P = P->nextPost;
+        cout << "------------------------\n";
+        U = U->nextUser;
     }
 }
 

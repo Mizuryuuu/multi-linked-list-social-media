@@ -131,7 +131,7 @@ void showPostinganUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser curr
 void showCommentUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser);
 void showCommentByPost(ListUser LU, ListComment &LC, adrPost P, adrUser currentUser);
 void showProfile(ListUser LU, adrUser &currentUser);
-void showCommentWithPost(ListPost LP);
+void showAllParentAndChild(ListUser LU);
 void showCommentWithUser(ListUser LU);
 void showPostWithParentUser(ListUser LU);
 adrUser findUserById(ListUser L, int idUser);
