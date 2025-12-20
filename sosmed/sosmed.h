@@ -26,6 +26,7 @@ struct infotypePost {
 // INFOTYPE COMMENT
 struct infotypeComment {
     int idComment;
+    int idPost;
     int idUserComment;   
     string date;    
     string comment;
@@ -129,6 +130,10 @@ void showBeranda(ListUser LU, ListPost LP);
 void showPostinganUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser);
 void showCommentUser(ListUser &LU, ListPost &LP, ListComment &LC, adrUser currentUser);
 void showCommentByPost(ListUser LU, ListComment &LC, adrPost P, adrUser currentUser);
+void showProfile(ListUser LU, adrUser &currentUser);
+void showCommentWithPost(ListPost LP);
+void showCommentWithUser(ListUser LU);
+void showPostWithParentUser(ListUser LU);
 adrUser findUserById(ListUser L, int idUser);
 adrPost findPostById(ListPost L, int idPost);
 adrComment findCommentById(ListComment L, int idComment);
@@ -140,9 +145,13 @@ int countUser(ListUser L);
 int countRelationPost(ListUser L, adrPost P);
 int countNoRelationPost(ListUser LU, ListPost LP);
 int countNoRelationComment(ListPost LP, ListComment LC);
+void editRelationUserPost(adrUser U, adrPost oldPost, adrPost newPost);
+void editRelationPostComment(adrPost P, adrComment oldC, adrComment newC);
 // End Main Function
 
 // COMMON FUNCTION
+void login(ListUser &LU, adrUser &currentUser);
+void registerUser(ListUser &LU);
 bool isValidDate(string date);
 vector<adrPost> getRandomPost(ListPost L);
 // COMMON FUNCTION END

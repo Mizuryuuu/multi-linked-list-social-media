@@ -9,13 +9,13 @@ Delete element relation : 5 ✅ <br>
 Find element Parent : 5 ✅ // Global <br> 
 Find element child : 5 ✅ // Global <br> 
 Find element relation : 5 ✅ // Global <br> 
-Show all data di List Parent : 5 (not yet) // Global <br> 
-Show all data di List Child : 5 (not yet) // Global <br>
-Show data child dari parent tertentu : 5 (not yet) <br>
-Show setiap data parent beserta data child yang berelasi dengannya : 5 ✅ <br>
-Show data child beserta data parent yang masing-masing child miliki // Global : 10 ✅<br>
+Show all data di List Parent : 5 (not yet) // Global <br>  111111111111
+Show all data di List Child : 5 (not yet) // Global <br> 2222333333
+Show data child dari parent tertentu : 5 ✅ <br> 
+Show setiap data parent beserta data child yang berelasi dengannya : 5 ✅ <br> 444444444
+Show data child beserta data parent yang masing-masing child miliki // Global : 10 ✅<br>  555555555
 Show data parent yang berelasi dengan child tertentu : 5 (not yet) // Global <br> 
 Count relation dari setiap element parent : 5 ✅ // Global <br> 
 Count relation yang dimiliki oleh child tertentu : 5 ✅ // Global <br> 
 Count element child yang tidak memiliki relasi : 5 ✅ // Global <br> 
-Edit relasi /mengganti child dari parent tertentu : 5 // Global (not yet) <br>
+Edit relasi/mengganti child dari parent tertentu : 5 // Global (not yet) <br>
